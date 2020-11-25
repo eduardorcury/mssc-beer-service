@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -34,7 +35,7 @@ import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(RestDocumentationExtension.class)
-@AutoConfigureRestDocs
+@AutoConfigureRestDocs(uriScheme = "https", uriHost = "dev.erc", uriPort = 80)
 @WebMvcTest(BeerController.class)
 @ComponentScan(basePackages = { "com.erc.msscbeerservice.web.mappers" })
 class BeerControllerTest {
@@ -57,7 +58,7 @@ class BeerControllerTest {
                 .param("iscold", "yes")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(document("v1/beer",
+                .andDo(document("v1/beer-get",
                         pathParameters(
                                 parameterWithName("beerId").description("UUID of desired beer to get.")
                         ),
@@ -65,15 +66,15 @@ class BeerControllerTest {
                                 parameterWithName("iscold").description("Is Beer Cold Query Param")
                         ),
                         responseFields(
-                                fieldWithPath("id").description("Id of the Beer"),
-                                fieldWithPath("version").description("Version of the Beer"),
-                                fieldWithPath("createdDate").description("Date of creation of the Beer"),
-                                fieldWithPath("lastModifiedDate").description("Last date of modification of the Beer"),
-                                fieldWithPath("beerName").description("Name of the Beer"),
+                                fieldWithPath("id").description("Id of the Beer").type(UUID.class),
+                                fieldWithPath("version").description("Version of the Beer").type(Integer.class),
+                                fieldWithPath("createdDate").description("Date of creation of the Beer").type(OffsetDateTime.class),
+                                fieldWithPath("lastModifiedDate").description("Last date of modification of the Beer").type(OffsetDateTime.class),
+                                fieldWithPath("beerName").description("Name of the Beer").type(String.class),
                                 fieldWithPath("beerStyle").description("Style of the Beer"),
-                                fieldWithPath("upc").description("UPC of the Beer"),
-                                fieldWithPath("price").description("Price of the Beer"),
-                                fieldWithPath("quantityOnHand").description("Quantity on hand of the Beer")
+                                fieldWithPath("upc").description("UPC of the Beer").type(Long.class),
+                                fieldWithPath("price").description("Price of the Beer").type(BigDecimal.class),
+                                fieldWithPath("quantityOnHand").description("Quantity on hand of the Beer").type(Integer.class)
                         )));
     }
 
@@ -89,7 +90,7 @@ class BeerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(beerDtoJson))
                 .andExpect(status().isCreated())
-                .andDo(document("v1/beer",
+                .andDo(document("v1/beer-save",
                         requestFields(
                                 fields.withPath("id").ignored(),
                                 fields.withPath("version").ignored(),
