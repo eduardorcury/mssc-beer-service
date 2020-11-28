@@ -1,10 +1,7 @@
 package com.erc.msscbeerservice.web.controller;
 
-import com.erc.msscbeerservice.repositories.BeerRepository;
 import com.erc.msscbeerservice.services.BeerService;
-import com.erc.msscbeerservice.web.mappers.BeerMapper;
 import com.erc.msscbeerservice.web.model.BeerDto;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

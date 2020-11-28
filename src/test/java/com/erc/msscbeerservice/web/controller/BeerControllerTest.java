@@ -1,7 +1,9 @@
 package com.erc.msscbeerservice.web.controller;
 
+import com.erc.msscbeerservice.bootstrap.BeerLoader;
 import com.erc.msscbeerservice.domain.Beer;
 import com.erc.msscbeerservice.repositories.BeerRepository;
+import com.erc.msscbeerservice.services.BeerService;
 import com.erc.msscbeerservice.web.model.BeerDto;
 import com.erc.msscbeerservice.web.model.BeerStyleEnum;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,12 +49,12 @@ class BeerControllerTest {
     ObjectMapper objectMapper;
 
     @MockBean
-    BeerRepository beerRepository;
+    BeerService beerService;
 
     @Test
     void getBeerById() throws Exception {
 
-        given(beerRepository.findById(any())).willReturn(Optional.of(Beer.builder().build()));
+        given(beerService.getById(any())).willReturn(getValidBeerDto());
 
         mockMvc.perform(get("/api/v1/beer/{beerId}", UUID.randomUUID().toString())
                 .param("iscold", "yes")
@@ -72,7 +74,7 @@ class BeerControllerTest {
                                 fieldWithPath("lastModifiedDate").description("Last date of modification of the Beer").type(OffsetDateTime.class),
                                 fieldWithPath("beerName").description("Name of the Beer").type(String.class),
                                 fieldWithPath("beerStyle").description("Style of the Beer"),
-                                fieldWithPath("upc").description("UPC of the Beer").type(Long.class),
+                                fieldWithPath("upc").description("UPC of the Beer"),
                                 fieldWithPath("price").description("Price of the Beer").type(BigDecimal.class),
                                 fieldWithPath("quantityOnHand").description("Quantity on hand of the Beer").type(Integer.class)
                         )));
@@ -122,7 +124,7 @@ class BeerControllerTest {
                 .beerName("My Beer")
                 .beerStyle(BeerStyleEnum.ALE)
                 .price(new BigDecimal("5.99"))
-                .upc(1234567890L)
+                .upc(BeerLoader.BEER_1_UPC)
                 .build();
     }
 
