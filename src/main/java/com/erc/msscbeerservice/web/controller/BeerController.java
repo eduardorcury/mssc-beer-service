@@ -23,7 +23,7 @@ public class BeerController {
 
     private final BeerService beerService;
 
-    @GetMapping
+    @GetMapping(produces = { "application/json" })
     public ResponseEntity<BeerPagedList> listBeers(@RequestParam(value = "pageNumber", required = false) Integer pageNumber,
                                                    @RequestParam(value = "pageSize", required = false) Integer pageSize,
                                                    @RequestParam(value = "beerName", required = false) String beerName,
