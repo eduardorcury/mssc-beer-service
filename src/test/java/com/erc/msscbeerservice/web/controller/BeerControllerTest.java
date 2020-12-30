@@ -1,9 +1,8 @@
 package com.erc.msscbeerservice.web.controller;
 
 import com.erc.msscbeerservice.bootstrap.BeerLoader;
-import com.erc.msscbeerservice.domain.Beer;
-import com.erc.msscbeerservice.repositories.BeerRepository;
 import com.erc.msscbeerservice.services.BeerService;
+import com.erc.msscbeerservice.services.inventory.BeerInventoryService;
 import com.erc.msscbeerservice.web.model.BeerDto;
 import com.erc.msscbeerservice.web.model.BeerStyleEnum;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,13 +17,11 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.restdocs.payload.FieldDescriptor;
-import org.springframework.restdocs.snippet.Attributes;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.*;
@@ -51,10 +48,13 @@ class BeerControllerTest {
     @MockBean
     BeerService beerService;
 
+    @MockBean
+    BeerInventoryService beerInventoryService;
+
     @Test
     void getBeerById() throws Exception {
 
-        given(beerService.getById(any())).willReturn(getValidBeerDto());
+        given(beerService.getById(any(), anyBoolean())).willReturn(getValidBeerDto());
 
         mockMvc.perform(get("/api/v1/beer/{beerId}", UUID.randomUUID().toString())
                 .param("iscold", "yes")
