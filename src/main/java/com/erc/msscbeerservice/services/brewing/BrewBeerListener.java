@@ -9,6 +9,7 @@ import com.erc.msscbeerservice.web.model.BeerDto;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class BrewBeerListener {
@@ -21,6 +22,7 @@ public class BrewBeerListener {
         this.jmsTemplate = jmsTemplate;
     }
 
+    @Transactional
     @JmsListener(destination = JmsConfig.BREWING_REQUEST_QUEUE)
     public void listen(BrewBeerEvent event) {
 

@@ -10,7 +10,11 @@ public class BeerEvent implements Serializable {
 
     static final long serialVersionUID = -5815566940065181210L;
 
-    private final BeerDto beerDto;
+    private BeerDto beerDto;
+
+    public BeerEvent() {
+
+    }
 
     public BeerEvent(BeerDto beerDto) {
         this.beerDto = beerDto;
